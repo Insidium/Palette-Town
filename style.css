@@ -37,7 +37,7 @@ svg {
 }
 
 .colour h2 {
-  font-family: "Josefin Sans", sans-serif;
+  font-size: 2rem;
   cursor: pointer;
 }
 
@@ -47,7 +47,7 @@ svg {
   position: absolute;
   bottom: 0%;
   background: #fff;
-  opacity: 1;
+  opacity: 0;
   padding: 1rem;
   width: 80%;
   border-top-right-radius: 1rem;
@@ -63,12 +63,14 @@ svg {
   pointer-events: all;
 }
 
-.sliders button {
+.sliders button,
+.close-save,
+.close-library {
   position: absolute;
   top: 0;
   right: 0;
   padding: 0.5rem;
-  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
   border: none;
   background: #000;
