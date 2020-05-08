@@ -126,6 +126,9 @@ function hslControls(e) {
 
   //set background colour of div to selected colour above
   colourDivs[index].style.backgroundColor = colour;
+
+  //correctly colourise slider inputs based on positions
+  colouriseSliders(colour, hue, brightness, saturation);
 }
 
 //Update hex text and contrast of text and controls buttons
