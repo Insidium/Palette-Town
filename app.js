@@ -62,6 +62,9 @@ function randomColours() {
 
     colouriseSliders(colour, hue, brightness, saturation);
   });
+
+  //Reset slider inputs
+  resetInputs();
 }
 
 //Change contrast for hex text according to the lumninance of colour
@@ -125,6 +128,7 @@ function hslControls(e) {
   colourDivs[index].style.backgroundColor = colour;
 }
 
+//Update hex text and contrast of text and controls buttons
 function updateTextUI(index) {
   //target active div in play
   const activeDiv = colourDivs[index];
@@ -142,6 +146,29 @@ function updateTextUI(index) {
   for (icon of icons) {
     checkTextContrast(colour, icon);
   }
+}
+
+function resetInputs() {
+  //target all slider inputs
+  const sliders = document.querySelectorAll(".sliders input");
+  //update the slider position based on the current colour's actual hue/bright/sat positions
+  sliders.forEach((slider) => {
+    if (slider.name === "hue") {
+      const hueColour = initialColours[slider.getAttribute("data-hue")];
+      const hueValue = chroma(hueColour).hsl()[0];
+      slider.value = Math.floor(hueValue);
+    }
+    if (slider.name === "brightness") {
+      const brightColour = initialColours[slider.getAttribute("data-bright")];
+      const brightValue = chroma(brightColour).hsl()[2];
+      slider.value = Math.floor(brightValue * 100) / 100;
+    }
+    if (slider.name === "saturation") {
+      const satColour = initialColours[slider.getAttribute("data-sat")];
+      const satValue = chroma(satColour).hsl()[1];
+      slider.value = Math.floor(satValue * 100) / 100;
+    }
+  });
 }
 
 //invoke random colours
