@@ -8,6 +8,14 @@ const generateBtn = document.querySelector(".generate");
 const sliders = document.querySelectorAll('input[type="range"]');
 //target colour headings (for hex)
 const currentHexes = document.querySelectorAll(".colour h2");
+//popup animation
+const popup = document.querySelector(".copy-container");
+//adjustment button for sliders
+const adjustButton = document.querySelectorAll(".adjust");
+//closing adjustments
+const closeAdjustments = document.querySelectorAll(".close-adjustment");
+//sliders container panel
+const sliderContainers = document.querySelectorAll(".sliders");
 //provide initial colours variable for storage
 let initialColours;
 
@@ -22,6 +30,34 @@ sliders.forEach((slider) => {
 colourDivs.forEach((slider, index) => {
   slider.addEventListener("change", () => {
     updateTextUI(index);
+  });
+});
+
+//listen for click to copy hex value to clipboard
+currentHexes.forEach((hex) => {
+  hex.addEventListener("click", () => {
+    copyToClipboard(hex);
+  });
+});
+
+//listen for popup animation to end and then make it go away
+popup.addEventListener("transitionend", () => {
+  const popupBox = popup.children[0];
+  popup.classList.remove("active");
+  popupBox.classList.remove("active");
+});
+
+//listen for click on button to open adjustment panel
+adjustButton.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    openAdjustmentPanel(index);
+  });
+});
+
+//listen for click on X button to close adjustment panel
+closeAdjustments.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    closeAdjustmentPanel(index);
   });
 });
 
@@ -172,6 +208,37 @@ function resetInputs() {
       slider.value = Math.floor(satValue * 100) / 100;
     }
   });
+}
+
+//copy hex value to clipboard
+function copyToClipboard(hex) {
+  //assign a placeholder text area for copying hex
+  const ele = document.createElement("textarea");
+  //save value as inner text of hex
+  ele.value = hex.innerText;
+  //add this element to the body
+  document.body.appendChild(ele);
+  //select the element
+  ele.select();
+  //run copy command on the element
+  document.execCommand("copy");
+  //remove the value from the element
+  document.body.removeChild(ele);
+  //popup animation on click to confirm copy
+  const popupBox = popup.children[0];
+  //add active class to the the background area - darkens it for popup display
+  popup.classList.add("active");
+  //add active class to the popup box itself to appear
+  popupBox.classList.add("active");
+}
+
+//apply active class to
+function openAdjustmentPanel(index) {
+  sliderContainers[index].classList.toggle("active");
+}
+
+function closeAdjustmentPanel(index) {
+  sliderContainers[index].classList.remove("active");
 }
 
 //invoke random colours
