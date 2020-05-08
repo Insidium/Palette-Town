@@ -4,11 +4,17 @@
 const colourDivs = document.querySelectorAll(".colour");
 //target generate button
 const generateBtn = document.querySelector(".generate");
-//target all  sliders
-const sliders = document.querySelector('input[type="range"]');
+//target all sliders
+const sliders = document.querySelectorAll('input[type="range"]');
 //target colour headings (for hex)
 const currentHexes = document.querySelectorAll(".colour h2");
 let initialColours;
+
+//Event Listeners
+
+sliders.forEach((slider) => {
+  slider.addEventListener("input", hslControls);
+});
 
 //Functions
 
@@ -54,6 +60,7 @@ function checkTextContrast(colour, text) {
   }
 }
 
+//Set colours for sliders
 function colouriseSliders(colour, hue, brightness, saturation) {
   //Scale Saturation
   const noSat = colour.set("hsl.s", 0); //set no saturation (lowest on scale)
@@ -74,6 +81,34 @@ function colouriseSliders(colour, hue, brightness, saturation) {
   )},${scaleBright(0.5)} ,${scaleBright(1)})`;
   //display standard hue spectrum - like a rainbow of colours
   hue.style.backgroundImage = `linear-gradient(to right, rgb(204,75,75),rgb(204,204,75),rgb(75,204,75),rgb(75,204,204),rgb(75,75,204),rgb(204,75,204),rgb(204,75,75))`;
+}
+
+//Set event controls for sliders
+function hslControls(e) {
+  //target the index of each slider based on position in colour div order
+  const index =
+    e.target.getAttribute("data-bright") ||
+    e.target.getAttribute("data-sat") ||
+    e.target.getAttribute("data-hue");
+
+  //target parent element of sliders
+  let sliders = e.target.parentElement.querySelectorAll('input[type="range"]');
+  //set hue/bright/sat to assigned slider
+  const hue = sliders[0];
+  const brightness = sliders[1];
+  const saturation = sliders[2];
+
+  //target hex value in h2 of colour div selected
+  const bgColour = colourDivs[index].querySelector("h2").innerText;
+
+  //get selected colour and set each slider parameter
+  let colour = chroma(bgColour)
+    .set("hsl.s", saturation.value)
+    .set("hsl.l", brightness.value)
+    .set("hsl.h", hue.value);
+
+  //set background colour of div to selected colour above
+  colourDivs[index].style.backgroundColor = colour;
 }
 
 randomColours();
