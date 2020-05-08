@@ -12,8 +12,16 @@ let initialColours;
 
 //Event Listeners
 
+//listen for change to input on sliders to change colour
 sliders.forEach((slider) => {
   slider.addEventListener("input", hslControls);
+});
+
+//listen for above change on sliders to change hex value text
+colourDivs.forEach((slider, index) => {
+  slider.addEventListener("change", () => {
+    updateTextUI(index);
+  });
 });
 
 //Functions
@@ -111,4 +119,24 @@ function hslControls(e) {
   colourDivs[index].style.backgroundColor = colour;
 }
 
+function updateTextUI(index) {
+  //target active div in play
+  const activeDiv = colourDivs[index];
+  //assign colour to background colour
+  const colour = chroma(activeDiv.style.backgroundColor);
+  //select the h2 hex value
+  const textHex = activeDiv.querySelector("h2");
+  //select the buttons with class of contols
+  const icons = activeDiv.querySelectorAll(".controls button");
+  //assign h2 hex value as the updated hex colour
+  textHex.innerText = colour.hex();
+  //Check and change text contrast of updated colour
+  checkTextContrast(colour, textHex);
+  //Check and change all icons contrast of updated colour
+  for (icon of icons) {
+    checkTextContrast(colour, icon);
+  }
+}
+
+//invoke random colours
 randomColours();
