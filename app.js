@@ -357,6 +357,24 @@ function savePalette(e) {
   paletteBtn.classList.add(paletteObj.num);
   paletteBtn.innerText = "Select";
 
+  //add event to button
+  paletteBtn.addEventListener("click", (e) => {
+    closeLibrary();
+    //target index of select button
+    const paletteIndex = e.target.classList[1];
+    initialColours = [];
+    //for each colour in the array, push them back to display in colour divs (recall them)
+    savedPalettes[paletteIndex].colours.forEach((colour, index) => {
+      initialColours.push(colour);
+      colourDivs[index].style.backgroundColor = colour;
+      const text = colourDivs[index].children[0];
+      //make sure contrast is returned correctly and text updates to hex
+      checkTextContrast(colour, text);
+      updateTextUI(index);
+    });
+    resetInputs();
+  });
+
   //append above to the library container
   palette.appendChild(title);
   palette.appendChild(preview);
