@@ -330,8 +330,16 @@ function savePalette(e) {
   currentHexes.forEach((hex) => {
     colours.push(hex.innerText);
   });
+
   //generate palette object and push it to array
-  let paletteNum = savedPalettes.length;
+  let paletteNum;
+  const paletteObjects = JSON.parse(localStorage.getItem("palettes"));
+  if (paletteObjects) {
+    paletteNum = paletteObjects.length;
+  } else {
+    paletteNum = savedPalettes.length;
+  }
+
   const paletteObj = { name, colours, num: paletteNum };
   savedPalettes.push(paletteObj);
   //save to local storage
@@ -410,5 +418,60 @@ function closeLibrary() {
   popup.classList.remove("active");
 }
 
+//get library from local storage
+function getLocal() {
+  if (localStorage.getItem("palettes") === null) {
+    localPalettes = [];
+  } else {
+    const paletteObjects = JSON.parse(localStorage.getItem("palettes"));
+    savedPalettes = [...paletteObjects];
+    paletteObjects.forEach((paletteObj) => {
+      //generate palette entries for library
+      const palette = document.createElement("div");
+      palette.classList.add("custom-palette");
+      const title = document.createElement("h4");
+      title.innerText = paletteObj.name;
+      const preview = document.createElement("div");
+      preview.classList.add("small-preview");
+      //adding small div tiles for palette colours
+      paletteObj.colours.forEach((smallColour) => {
+        const smallDiv = document.createElement("div");
+        smallDiv.style.backgroundColor = smallColour;
+        preview.appendChild(smallDiv);
+      });
+      //palette select button classes
+      const paletteBtn = document.createElement("button");
+      paletteBtn.classList.add("pick-palette-btn");
+      paletteBtn.classList.add(paletteObj.num);
+      paletteBtn.innerText = "Select";
+
+      //add event to button
+      paletteBtn.addEventListener("click", (e) => {
+        closeLibrary();
+        //target index of select button
+        const paletteIndex = e.target.classList[1];
+        initialColours = [];
+        //for each colour in the array, push them back to display in colour divs (recall them)
+        paletteObjects[paletteIndex].colours.forEach((colour, index) => {
+          initialColours.push(colour);
+          colourDivs[index].style.backgroundColor = colour;
+          const text = colourDivs[index].children[0];
+          //make sure contrast is returned correctly and text updates to hex
+          checkTextContrast(colour, text);
+          updateTextUI(index);
+        });
+        resetInputs();
+      });
+      //append above to the library container
+      palette.appendChild(title);
+      palette.appendChild(preview);
+      palette.appendChild(paletteBtn);
+      libraryContainer.children[0].appendChild(palette);
+    });
+  }
+}
+
+//invoke getting local storage objects
+getLocal();
 //invoke random colours
 randomColours();
