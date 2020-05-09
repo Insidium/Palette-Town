@@ -247,3 +247,12 @@ input[type="range"] {
   background: #020253;
   color: #fff;
 }
+
+/* basic mobile responsiveness */
+@media only screen and (max-width: 600px) {
+  .colours {
+    height: 2000px;
+    display: flex;
+    flex-direction: column;
+  }
+}
