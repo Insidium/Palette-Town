@@ -43,6 +43,10 @@ svg {
   cursor: pointer;
 }
 
+.colour h2:hover {
+  text-decoration: underline;
+}
+
 .sliders {
   display: flex;
   flex-direction: column;
