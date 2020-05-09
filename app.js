@@ -267,12 +267,13 @@ function closeAdjustmentPanel(index) {
   sliderContainers[index].classList.remove("active");
 }
 
-//add lockec class to lock button on click
+//add locked class to lock button on click
 function lockLayer(e, index) {
+  //target lock button icon
   const lockSVG = e.target.children[0];
   const activeBg = colourDivs[index];
+  //toggle locked class
   activeBg.classList.toggle("locked");
-
   if (lockSVG.classList.contains("fa-lock-open")) {
     e.target.innerHTML = '<i class="fas fa-lock"></i>';
   } else {
@@ -284,7 +285,7 @@ function lockLayer(e, index) {
 
 //targeting elements with following classes
 const saveBtn = document.querySelector(".save");
-const submitBtn = document.querySelector(".submit-save");
+const submitSave = document.querySelector(".submit-save");
 const closeSave = document.querySelector(".close-save");
 const saveContainer = document.querySelector(".save-container");
 const saveInput = document.querySelector(".save-container input");
@@ -292,6 +293,9 @@ const saveInput = document.querySelector(".save-container input");
 //run openPalette on click of saveBtn
 saveBtn.addEventListener("click", openPalette);
 closeSave.addEventListener("click", closePalette);
+
+//listen for save button click for saving to local storage
+submitSave.addEventListener("click", savePalette);
 
 //add active class to popup on open
 function openPalette(e) {
@@ -305,6 +309,42 @@ function closePalette(e) {
   const popup = saveContainer.children[0];
   saveContainer.classList.remove("active");
   popup.classList.remove("active");
+}
+
+//save palette to local storage
+function savePalette(e) {
+  //remove active class to popup on save
+  saveContainer.classList.remove("active");
+  popup.classList.remove("active");
+  //assign name as the input value
+  const name = saveInput.value;
+  //save value to colours array
+  const colours = [];
+  currentHexes.forEach((hex) => {
+    colours.push(hex.innerText);
+  });
+  //generate palette object and push it to array
+  let paletteNum = savedPalettes.length;
+  const paletteObj = { name, colours, num: paletteNum };
+  savedPalettes.push(paletteObj);
+  //save to local storage
+  saveToLocal(paletteObj);
+  //reset input to blank after save
+  saveInput.value = "";
+}
+
+function saveToLocal(paletteObj) {
+  //if there is nothing in palettes, create an empty array for use, else get existing array of palettes
+  let localPalettes;
+  if (localStorage.getItem("palettes") === null) {
+    localPalettes = [];
+  } else {
+    localPalettes = JSON.parse(localStorage.getItem("palettes"));
+  }
+  //add palette object to array
+  localPalettes.push(paletteObj);
+  //return array back as list
+  localStorage.setItem("palettes", JSON.stringify(localPalettes));
 }
 
 //invoke random colours
