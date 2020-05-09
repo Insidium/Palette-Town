@@ -1,5 +1,5 @@
 # Palette-Town
-JS (incl ChromaJS) colour palette selection app with detailed refinement options and storage library 
+JavaScript (incl ChromaJS library) colour palette selection app with detailed refinement options and storage library 
 
 ### Huh? Another colour picker? Wow...
 
