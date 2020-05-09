@@ -77,7 +77,7 @@ lockButton.forEach((button, index) => {
 
 //Functions
 
-//Use ChromaJS to generate random hex colour - so much easier than above!
+//Use ChromaJS to generate random hex colour
 function generateHex() {
   const hexColour = chroma.random();
   return hexColour;
