@@ -12,6 +12,8 @@ const currentHexes = document.querySelectorAll(".colour h2");
 const popup = document.querySelector(".copy-container");
 //adjustment button for sliders
 const adjustButton = document.querySelectorAll(".adjust");
+//lock button for colour divs
+const lockButton = document.querySelectorAll(".lock");
 //closing adjustments
 const closeAdjustments = document.querySelectorAll(".close-adjustment");
 //sliders container panel
@@ -20,6 +22,9 @@ const sliderContainers = document.querySelectorAll(".sliders");
 let initialColours;
 
 //Event Listeners
+
+//listen for generate button click
+generateBtn.addEventListener("click", randomColours);
 
 //listen for change to input on sliders to change colour
 sliders.forEach((slider) => {
@@ -101,6 +106,12 @@ function randomColours() {
 
   //Reset slider inputs
   resetInputs();
+
+  //Check for adjust and lock button contrast
+  adjustButton.forEach((button, index) => {
+    checkTextContrast(initialColours[index], button);
+    checkTextContrast(initialColours[index], lockButton[index]);
+  });
 }
 
 //Change contrast for hex text according to the lumninance of colour
