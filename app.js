@@ -66,6 +66,13 @@ closeAdjustments.forEach((button, index) => {
   });
 });
 
+//listen for lock button click for hex value retain
+lockButton.forEach((button, index) => {
+  button.addEventListener("click", (e) => {
+    lockLayer(e, index);
+  });
+});
+
 //Functions
 
 //Use ChromaJS to generate random hex colour - so much easier than above!
@@ -84,8 +91,13 @@ function randomColours() {
     const hexText = div.children[0];
     //set random colour
     const randomColour = generateHex();
-    //Adde hex colour to the initial colours array
-    initialColours.push(chroma(randomColour).hex());
+    //Add hex colour to the initial colours array
+    if (div.classList.contains("locked")) {
+      initialColours.push(hexText.innerText);
+      return;
+    } else {
+      initialColours.push(chroma(randomColour).hex());
+    }
     //add random colour to background
     div.style.backgroundColor = randomColour;
     hexText.innerText = randomColour;
@@ -243,13 +255,27 @@ function copyToClipboard(hex) {
   popupBox.classList.add("active");
 }
 
-//apply active class to
+//apply active class to adjust panel
 function openAdjustmentPanel(index) {
   sliderContainers[index].classList.toggle("active");
 }
 
+//remove active class for adjust panel
 function closeAdjustmentPanel(index) {
   sliderContainers[index].classList.remove("active");
+}
+
+//add lockec class to lock button on click
+function lockLayer(e, index) {
+  const lockSVG = e.target.children[0];
+  const activeBg = colourDivs[index];
+  activeBg.classList.toggle("locked");
+
+  if (lockSVG.classList.contains("fa-lock-open")) {
+    e.target.innerHTML = '<i class="fas fa-lock"></i>';
+  } else {
+    e.target.innerHTML = '<i class="fas fa-lock-open"></i>';
+  }
 }
 
 //invoke random colours
